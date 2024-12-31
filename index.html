@@ -168,8 +168,9 @@ async function processLargeFile() {
 
         for (const line of lines) {
             if (line.includes(site)) {
-                // Extract user:pass using a regex
-                const match = line.match(/^([^:]+:[^@]+)@/);
+                // Remove URL and extract user:pass
+                const cleanedLine = line.replace(/https?:\/\/[^\s]+/, '').trim();
+                const match = cleanedLine.match(/^([^:]+:[^\s@]+)/);
                 if (match) {
                     filteredLines.push(match[1]); // Add only user:pass
                 }
@@ -186,7 +187,8 @@ async function processLargeFile() {
 
     // Process the final leftover line
     if (leftover && leftover.includes(site)) {
-        const match = leftover.match(/^([^:]+:[^@]+)@/);
+        const cleanedLine = leftover.replace(/https?:\/\/[^\s]+/, '').trim();
+        const match = cleanedLine.match(/^([^:]+:[^\s@]+)/);
         if (match) {
             filteredLines.push(match[1]);
         }
